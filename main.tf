@@ -1,8 +1,6 @@
 provider "aws" {
   region     = "us-east-2"
-  profile = "default"
-  //access_key = 
-  //secret_key = 
+  profile = "default" //Need to provide access_key and secret_access_key
 }
 
 module "vpc" {
@@ -34,7 +32,7 @@ module "auto_scaling" {
   image_id         = "ami-0a0ad6b70e61be944" //Used Amazon Linux 2
   instance_type    = "t2.micro"
 }
-
+/*
 module "rds" {
   source          = "./rds"
   db_instance     = "db.t2.micro"
@@ -45,4 +43,5 @@ module "rds" {
   password = "admin123"
   username = "admin"
 }
+    */
 
