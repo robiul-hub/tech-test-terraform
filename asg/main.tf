@@ -60,14 +60,15 @@ enabled_metrics = [
 tags = [
     {
     key                 = "Name"
-    value               = "WebServer-1"
+    value               = "WebServer"
     propagate_at_launch = true
-  },
+  }
+/*
 {
     key                 = "Name"
     value               = "WebServer-2"
     propagate_at_launch = true
-  }
+  }*/
 ]
 }
 
