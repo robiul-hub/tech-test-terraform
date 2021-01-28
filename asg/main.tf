@@ -1,10 +1,25 @@
+#Create a private key which can be used to login to the webserver
+resource "tls_private_key" "Web-Key" {
+  algorithm = "RSA"
+}
 
+#Save public key attributes from the generated key
+resource "aws_key_pair" "App-Instance-Key" {
+  key_name   = "Web-key"
+  public_key = tls_private_key.Web-Key.public_key_openssh
+}
+
+#Save the key to your local system
+resource "local_file" "Web-Key" {
+    content     = tls_private_key.Web-Key.private_key_pem 
+    filename = "Web-Key.pem"
+}
 
 resource "aws_launch_configuration" "my-web-launch-config" {
   name = "My-ASG-Config"
   image_id        = var.image_id 
   instance_type   = var.instance_type 
-  key_name = "JenKey"
+  key_name = "Web-key"
   security_groups = [var.security_group] 
   associate_public_ip_address = true 
   user_data = <<-EOF
