@@ -26,10 +26,7 @@ resource "aws_lb" "my-aws-alb" {
   
   security_groups = [var.security_group]
   
-  subnets = [
-    "var.subnet1,
-    var.subnet2
-  ]
+  subnets = [var.subnet1, var.subnet2]
 
   tags = {
     Name = "My-ALB" 
