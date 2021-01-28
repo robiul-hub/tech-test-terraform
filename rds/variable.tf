@@ -3,9 +3,3 @@ variable "rds_subnet2" {}
 variable "db_instance" {}
 variable "vpc_id" {}
 variable "security_groups" {}
-variable "username" {
-  type = list(string)
-  }
-variable "password" {
-  type = list(string)
-  }
