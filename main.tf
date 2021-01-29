@@ -39,7 +39,7 @@ module "rds" {
   rds_subnet1     = module.vpc.private_subnet1
   rds_subnet2     = module.vpc.private_subnet2
   vpc_id          = module.vpc.aws_vpc_id
-  security_groups = module.vpc.security1_group
+  security_groups = module.auto_scaling.ASG-SG
   password = "admin123"
   username = "admin"
 }
