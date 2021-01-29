@@ -15,13 +15,50 @@ resource "local_file" "Web-Key" {
     filename = "Web-Key.pem"
 }
 
+// Creting Auto Scaling Group EC2 Instances Security Group
+
+resource "aws_security_group" "asg-sg" {
+  name        = "ASG_SG"
+  description = "Allow inbound traffic"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "HTTP Traffic"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups   = [var.security_group]
+  }
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ASG-SG"
+  }
+}
+
+// Creating ASG Launch Configuration
+
 resource "aws_launch_configuration" "my-web-launch-config" {
   name = "My-ASG-Config"
   image_id        = var.image_id 
   instance_type   = var.instance_type 
   key_name = "Web-key"
-  security_groups = [var.security_group] 
-  associate_public_ip_address = true 
+  security_groups = [aws_security_group.asg-sg.id] 
+  //associate_public_ip_address = true 
   user_data = <<-EOF
               #!/bin/bash
               sudo yum -y install httpd php git 
@@ -35,6 +72,8 @@ resource "aws_launch_configuration" "my-web-launch-config" {
     create_before_destroy = true
   }
 }
+
+// Creating ASG
 
 resource "aws_autoscaling_group" "web_asg" {
   name = "My-ASG"
@@ -65,6 +104,8 @@ tags = [
   }
 ]
 }
+
+// Creating ASG Policy for scale out and scale in
 
 resource "aws_autoscaling_policy" "web_policy_up" {
   name = "web_policy_up"
