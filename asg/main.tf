@@ -58,7 +58,6 @@ resource "aws_launch_configuration" "my-web-launch-config" {
   instance_type   = var.instance_type 
   key_name = "Web-key"
   security_groups = [aws_security_group.asg-sg.id] 
-  //associate_public_ip_address = true 
   user_data = <<-EOF
               #!/bin/bash
               sudo yum -y install httpd php git 
